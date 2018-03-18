@@ -1,0 +1,23 @@
+{
+   "name": "api",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "devDependencies": {
+      "@types/node": "^8.9.5",
+      "ts-node": "3.3.0",
+      "typescript": "2.5.2"
+   },
+   "dependencies": {
+      "@types/hapi": "^17.0.7",
+      "class-validator": "^0.8.1",
+      "hapi": "^17.2.3",
+      "hapi-auth-bearer-token": "^6.0.1",
+      "pg": "^7.4.1",
+      "reflect-metadata": "^0.1.12",
+      "tslint": "^5.9.1",
+      "typeorm": "0.1.14"
+   },
+   "scripts": {
+      "start": "nodemon --verbose --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
+   }
+}
