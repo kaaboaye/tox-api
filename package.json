@@ -20,6 +20,6 @@
       "typeorm": "0.1.14"
    },
    "scripts": {
-      "start": "nodemon --verbose --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'kill `lsof -ti tcp:3001`; ts-node' src/index.ts"
+      "debug": "nodemon --verbose --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'kill `lsof -ti tcp:3001`; ts-node' src/index.ts"
    }
 }
