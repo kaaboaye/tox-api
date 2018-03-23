@@ -1,13 +1,17 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
-import {User} from "./entity/User";
-import {Init} from "./Hapi";
+import { HapiApp, Init } from "./Hapi";
+import { ConnectionConfig } from "./DataBase";
+import { createConnection } from "typeorm";
 
 // Starting point
 (async () => {
     console.log(`Loading app…`);
 
-    const server = Init();
+    const server = await Init();
+    (server.app as HapiApp).connection = await createConnection(ConnectionConfig);
+    await server.start();
+
+    console.log('Server running at:', server.info.uri);
 })();
 
 

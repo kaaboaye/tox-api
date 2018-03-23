@@ -22,7 +22,7 @@
         "no-eval": true,
         "no-string-literal": false,
         "no-use-before-declare": true,
-        "no-any": true,
+        "no-any": false,
         "one-line": [
             true,
             "check-open-brace",
@@ -41,8 +41,11 @@
             true,
             "check-branch",
             "check-decl",
+            "check-module",
             "check-operator",
-            "check-separator"
+            "check-separator",
+            "check-type",
+            "check-typecast"
         ]
     }
 }
