@@ -9,6 +9,9 @@ const path = '/users';
 Users.push({
     path,
     method: 'post',
+    options: {
+        auth: false
+    },
     handler: async (request, h) => {
         try {
             const { identityId, firstName, lastName, email, phoneNumber, username, password, rank } = request.payload as any;
@@ -44,9 +47,12 @@ Users.push({
 });
 
 Users.push({
-   path: path + '/login',
-   method: 'post',
-   handler: async (request, h) => {
+    path: path + '/login',
+    method: 'post',
+    options: {
+        auth: false
+    },
+    handler: async (request, h) => {
        try {
            const { username, password } = request.payload as any;
 
