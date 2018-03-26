@@ -21,6 +21,6 @@
    },
    "scripts": {
       "debug-osx": "nodemon --verbose --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'kill `lsof -ti tcp:3001`; ts-node' src/index.ts",
-      "debug-linux": "nodemon --verbose --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
+      "debug-linux": "~/.npm-global/bin/nodemon --verbose --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
    }
 }
