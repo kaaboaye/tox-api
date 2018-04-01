@@ -7,6 +7,18 @@ export const Users: ServerRoute[] = [];
 const path = '/users';
 
 Users.push({
+    path: path + '/me',
+    method: 'get',
+    handler: async (request, h) => {
+        const { user } = request.auth.credentials as Session;
+
+        return User.findOneById(user.id, {
+            relations: ['identity']
+        });
+    }
+});
+
+Users.push({
     path,
     method: 'post',
     options: {
