@@ -1,20 +1,14 @@
 import 'reflect-metadata';
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
-
-export interface EventClosureUpdate {
-    dateOfDispatch?: Date;
-    annotations?: string;
-    dateOfClosure?: Date;
-}
+import { Person } from "./Person";
 
 @Entity()
-export class EventClosure extends BaseEntity {
+export class JobCompletion extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(type => EventClosure)
-    @JoinColumn()
-    prev: EventClosure;
+    @OneToOne(type => JobCompletion)
+    prev: JobCompletion;
 
     @Column({
         type: 'timestamp',
@@ -25,15 +19,21 @@ export class EventClosure extends BaseEntity {
     @Column({
         type: 'timestamp'
     })
-    dateOfDispatch: Date;
+    date: Date;
+
+    @Column({
+        type: 'text'
+    })
+    description: string;
+
+    @Column()
+    repairTime: string;
 
     @Column({
         type: 'text'
     })
     annotations: string;
 
-    @Column({
-        type: 'timestamp'
-    })
-    dateOfClosure: Date;
+    @ManyToOne(type => Person, serviceman => serviceman.id)
+    serviceman: Person;
 }

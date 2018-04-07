@@ -1,12 +1,12 @@
 import { ConnectionOptions } from "typeorm";
 import { Client } from "./entity/Client";
 import { Device } from "./entity/Device";
-import { Event } from "./entity/Event";
-import { EventClosure } from "./entity/EventClosure";
-import { EventCompletion } from "./entity/EventCompletion";
-import { EventDiagnosis } from "./entity/EventDiagnosis";
-import { EventOrders } from "./entity/EventOrders";
-import { EventRegistration } from "./entity/EventRegistration";
+import { Job } from "./entity/Job";
+import { JobClosure } from "./entity/JobClosure";
+import { JobCompletion } from "./entity/JobCompletion";
+import { JobDiagnosis } from "./entity/JobDiagnosis";
+import { JobOrders } from "./entity/JobOrders";
+import { JobRegistration } from "./entity/JobRegistration";
 import { Person } from "./entity/Person";
 import { Session } from "./entity/Session";
 import { User } from "./entity/User";
@@ -28,12 +28,12 @@ export const ConnectionConfig: ConnectionOptions = {
     entities: [
         Client,
         Device,
-        Event,
-        EventClosure,
-        EventCompletion,
-        EventDiagnosis,
-        EventOrders,
-        EventRegistration,
+        Job,
+        JobClosure,
+        JobCompletion,
+        JobDiagnosis,
+        JobOrders,
+        JobRegistration,
         Person,
         Session,
         User,

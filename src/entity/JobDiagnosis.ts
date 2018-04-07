@@ -2,16 +2,16 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColu
 import 'reflect-metadata';
 import { IsEnum } from "class-validator";
 import { Person } from "./Person";
-import { EventRepairType } from "./Event";
+import { JobRepairType } from "./Job";
 
 @Entity()
-export class EventDiagnosis extends BaseEntity {
+export class JobDiagnosis extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(type => EventDiagnosis)
+    @OneToOne(type => JobDiagnosis)
     @JoinColumn()
-    prev: EventDiagnosis;
+    prev: JobDiagnosis;
 
     @Column({
         type: 'timestamp',
@@ -154,6 +154,6 @@ export class EventDiagnosis extends BaseEntity {
     serviceman: Person;
 
     @Column()
-    @IsEnum(EventRepairType)
-    repairType: EventRepairType;
+    @IsEnum(JobRepairType)
+    repairType: JobRepairType;
 }

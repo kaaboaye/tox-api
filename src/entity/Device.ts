@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import 'reflect-metadata';
-import { Event } from "./Event";
+import { Job } from "./Job";
+import { Client } from "./Client";
 
 @Entity()
 export class Device extends BaseEntity {
@@ -16,8 +17,11 @@ export class Device extends BaseEntity {
     @Column()
     serialNumber: string;
 
+    @ManyToOne(type => Client, owner => owner.id)
+    owner: Client;
+
     // Relations
 
-    @OneToMany(type => Event, events => events.id)
-    events: Event[];
+    @OneToMany(type => Job, events => events.id)
+    events: Job[];
 }

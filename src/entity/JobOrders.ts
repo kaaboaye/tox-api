@@ -2,13 +2,13 @@ import 'reflect-metadata';
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 
 @Entity()
-export class EventOrders extends BaseEntity {
+export class JobOrders extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(type => EventOrders)
+    @OneToOne(type => JobOrders)
     @JoinColumn()
-    prev: EventOrders;
+    prev: JobOrders;
 
     @Column({
         type: 'timestamp',

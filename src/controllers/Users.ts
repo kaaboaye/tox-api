@@ -12,9 +12,12 @@ Users.push({
     handler: async (request, h) => {
         const { user } = request.auth.credentials as Session;
 
-        return User.findOneById(user.id, {
+        const u = await User.findOneById(user.id, {
             relations: ['identity']
         });
+
+        u.password = undefined;
+        return u;
     }
 });
 

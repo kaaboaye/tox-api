@@ -1,22 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import 'reflect-metadata';
 import { IsEnum } from "class-validator";
-import { EventRegistrationType } from "./Event";
+import { JobRegistrationType } from "./Job";
 
 export interface EventRegistrationUpdate {
-    type?: EventRegistration;
+    type?: JobRegistration;
     placeOfRealisation?: string;
     description?: string;
 }
 
 @Entity()
-export class EventRegistration extends BaseEntity {
+export class JobRegistration extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     // Linked list
-    @OneToOne(type => EventRegistration)
-    prev: EventRegistration;
+    @OneToOne(type => JobRegistration)
+    prev: JobRegistration;
 
     @Column({
         type: 'timestamp',
@@ -25,8 +25,8 @@ export class EventRegistration extends BaseEntity {
     createdAt: Date;
 
     @Column()
-    @IsEnum(EventRegistrationType)
-    type: EventRegistrationType;
+    @IsEnum(JobRegistrationType)
+    type: JobRegistrationType;
 
     @Column()
     placeOfRealisation: string;

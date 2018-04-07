@@ -2,7 +2,7 @@ import { ServerRoute } from "hapi";
 import { Client } from "../entity/Client";
 
 export const Clients: ServerRoute[] = [];
-const path = '/clients';
+export const path = '/clients';
 
 Clients.push({
     path,
