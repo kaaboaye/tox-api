@@ -31,11 +31,15 @@ ClientDevices.push({
 ClientDevices.push({
    path,
    method: 'post',
-   handler: async (request, h) => {
+   handler: async (request, h): Promise<any> => {
+       console.log('ZABIJ SIE');
+
        try {
            const { clientId } = request.params;
            const recived: Device = request.payload as Device;
            const client = await Client.findOneById(clientId);
+
+           console.log(client);
 
            if (!client) {
                throw new Error('NoSuchClient');
@@ -52,17 +56,15 @@ ClientDevices.push({
            return device;
 
        } catch (err) {
-           const exceptions: string[] = [
-               'NoSuchClient'
-           ];
-
-           if (exceptions.includes(err.message)) {
-               return {
-                   error: {
-                       message: err.message
-                   }
-               };
+           if ('NoSuchClient' === err.message) {
+               return h
+                   .response({
+                        message: 'NoSuchClient'
+                    })
+                   .code(404);
            }
+
+           throw err;
        }
    }
 });
