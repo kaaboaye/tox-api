@@ -21,9 +21,23 @@ ClientDevices.push({
         }
 
         return Device.find({
-           where: {
-               owner: clientId
-           }
+            where: {
+                owner: clientId
+            }
+        });
+    }
+});
+
+ClientDevices.push({
+    path: path + '/{deviceId}',
+    method: 'get',
+    handler: async (request, h) => {
+        const deviceId = parseInt(request.params.deviceId, 10);
+
+        return Device.findOneById(deviceId, {
+            relations: [
+                'owner'
+            ]
         });
     }
 });
@@ -32,14 +46,10 @@ ClientDevices.push({
    path,
    method: 'post',
    handler: async (request, h): Promise<any> => {
-       console.log('ZABIJ SIE');
-
        try {
            const { clientId } = request.params;
            const recived: Device = request.payload as Device;
            const client = await Client.findOneById(clientId);
-
-           console.log(client);
 
            if (!client) {
                throw new Error('NoSuchClient');

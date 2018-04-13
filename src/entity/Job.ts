@@ -17,6 +17,7 @@ export enum JobRepairType {
 }
 
 export enum JobState {
+    Created,
     Registered,
     Diagnosed,
     Ordered,

@@ -1,7 +1,10 @@
 import { ServerRoute } from "hapi";
 import { path as ClientsPath } from './Clients';
-import { Job } from "../entity/Job";
+import { Job, JobState } from "../entity/Job";
 import { Client } from "../entity/Client";
+import { Device } from "../entity/Device";
+import { Session } from "../entity/Session";
+import { User } from "../entity/User";
 
 export const ClientJobs: ServerRoute[] = [];
 const path = ClientsPath + '/{clientId}/jobs';
@@ -16,6 +19,7 @@ ClientJobs.push({
             return Job.find({
                 relations: [
                     'client',
+                    'applicant',
                     'device'
                 ]
             });
@@ -26,8 +30,27 @@ ClientJobs.push({
                 client: clientId
             },
             relations: [
+                'applicant',
                 'device'
             ]
+        });
+    }
+});
+
+ClientJobs.push({
+    path: path + '/{jobId}',
+    method: 'get',
+    handler: async (request, h) => {
+        const jobId: number = parseInt(request.params.jobId, 10);
+
+        return Job.findOneById(jobId, {
+           relations: [
+               'client',
+               'applicant',
+               'dispatcher',
+               'device',
+               'registration'
+           ]
         });
     }
 });
@@ -36,11 +59,42 @@ ClientJobs.push({
     path,
     method: 'post',
     handler: async (request, h) => {
-        const { clientId } = request.params;
+        try {
+            const { clientId } = request.params;
+            const { user } = request.auth.credentials as Session;
+            const received: Job = request.payload as Job;
 
-        const client = Client.findOneById(clientId);
+            const client = await Client.findOneById(clientId);
+            if (!client) {
+                throw new Error('NoSuchClient');
+            }
 
-        const job = new Job();
+            const u = await User.findOneById(user.id, {
+                relations: ['identity']
+            });
+
+            const job = new Job();
+            job.client = client;
+            job.applicant = received.applicant;
+            job.device = received.device;
+            job.dispatcher = u.identity;
+            job.state = JobState.Created;
+
+            await job.save();
+
+            return job;
+
+        } catch (err) {
+            if ('NoSuchClient' === err.message) {
+                return h
+                    .response({
+                        message: 'NoSuchClient'
+                    })
+                    .code(404);
+            }
+
+            throw err;
+        }
 
     }
 });
