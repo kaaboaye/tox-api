@@ -1,11 +1,12 @@
 import { ServerRoute } from "hapi";
 import { Job, JobExtendedRelations, JobState } from "../entity/Job";
-import { JobRegistration } from "../entity/JobRegistration";
+import { JobCompletion } from "../entity/JobCompletion";
+import { convertRuleOptions } from "tslint/lib/configuration";
 
-export const JobRegistrations: ServerRoute[] = [];
-export const path = '/job-registration';
+export const JobCompletions: ServerRoute[] = [];
+export const path = '/job-completions';
 
-JobRegistrations.push({
+JobCompletions.push({
     path,
     method: 'post',
     handler: async (request, h) => {
@@ -19,15 +20,17 @@ JobRegistrations.push({
                 throw new Error('NoSuchJob');
             }
 
-            const registration = new JobRegistration();
-            registration.type = received.registration.type;
-            registration.placeOfRealisation = received.registration.placeOfRealisation;
-            registration.description = received.registration.description;
+            const completion = new JobCompletion();
+            completion.date = received.completion.date;
+            completion.description = received.completion.description;
+            completion.repairTime = received.completion.repairTime;
+            completion.annotations = received.completion.annotations;
+            completion.serviceman = received.completion.serviceman;
 
-            await registration.save();
+            await completion.save();
 
-            job.registration = registration;
-            job.state = JobState.Registered;
+            job.completion = completion;
+            job.state = JobState.Finished;
 
             await job.save();
 

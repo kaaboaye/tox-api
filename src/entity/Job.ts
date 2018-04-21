@@ -5,6 +5,9 @@ import { Person } from "./Person";
 import { Device } from "./Device";
 import { JobRegistration } from "./JobRegistration";
 import { IsEnum } from "class-validator";
+import { JobDiagnosis } from "./JobDiagnosis";
+import { JobOrder } from "./JobOrder";
+import { JobCompletion } from "./JobCompletion";
 
 export enum JobRegistrationType {
     PostWarranty,
@@ -25,6 +28,19 @@ export enum JobState {
     Closed,
     Deleted
 }
+
+export const JobExtendedRelations = [
+    'client',
+    'applicant',
+    'dispatcher',
+    'device',
+    'registration',
+    'diagnosis',
+    'diagnosis.serviceman',
+    'order',
+    'completion',
+    'completion.serviceman'
+];
 
 @Entity()
 export class Job extends BaseEntity {
@@ -58,6 +74,18 @@ export class Job extends BaseEntity {
     @OneToOne(type => JobRegistration)
     @JoinColumn()
     registration: JobRegistration;
+
+    @OneToOne(type => JobDiagnosis)
+    @JoinColumn()
+    diagnosis: JobDiagnosis;
+
+    @OneToOne(type => JobOrder)
+    @JoinColumn()
+    order: JobOrder;
+
+    @OneToOne(type => JobCompletion)
+    @JoinColumn()
+    completion: JobCompletion;
 
     @Column({
         type: 'timestamp',

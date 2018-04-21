@@ -5,7 +5,7 @@ import { Job } from "./entity/Job";
 import { JobClosure } from "./entity/JobClosure";
 import { JobCompletion } from "./entity/JobCompletion";
 import { JobDiagnosis } from "./entity/JobDiagnosis";
-import { JobOrders } from "./entity/JobOrders";
+import { JobOrder } from "./entity/JobOrder";
 import { JobRegistration } from "./entity/JobRegistration";
 import { Person } from "./entity/Person";
 import { Session } from "./entity/Session";
@@ -32,7 +32,7 @@ export const ConnectionConfig: ConnectionOptions = {
         JobClosure,
         JobCompletion,
         JobDiagnosis,
-        JobOrders,
+        JobOrder,
         JobRegistration,
         Person,
         Session,

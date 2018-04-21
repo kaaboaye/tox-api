@@ -1,11 +1,11 @@
 import { ServerRoute } from "hapi";
 import { Job, JobExtendedRelations, JobState } from "../entity/Job";
-import { JobRegistration } from "../entity/JobRegistration";
+import { JobOrder } from "../entity/JobOrder";
 
-export const JobRegistrations: ServerRoute[] = [];
-export const path = '/job-registration';
+export const JobOrders: ServerRoute[] = [];
+export const path = '/job-orders';
 
-JobRegistrations.push({
+JobOrders.push({
     path,
     method: 'post',
     handler: async (request, h) => {
@@ -19,15 +19,15 @@ JobRegistrations.push({
                 throw new Error('NoSuchJob');
             }
 
-            const registration = new JobRegistration();
-            registration.type = received.registration.type;
-            registration.placeOfRealisation = received.registration.placeOfRealisation;
-            registration.description = received.registration.description;
+            const order = new JobOrder();
+            order.clientsOrder = received.order.clientsOrder;
+            order.numberSAP = received.order.numberSAP;
+            order.purchaseOrder = received.order.purchaseOrder;
 
-            await registration.save();
+            await order.save();
 
-            job.registration = registration;
-            job.state = JobState.Registered;
+            job.order = order;
+            job.state = JobState.Ordered;
 
             await job.save();
 

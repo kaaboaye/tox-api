@@ -9,7 +9,15 @@ People.push({
     path: path + '/{clientId}',
     method: 'get',
     handler: async (request, h) => {
-        const { clientId } = request.params;
+        const clientId = parseInt(request.params.clientId, 10);
+
+        if (clientId === 0) {
+            return Person.find({
+                where: {
+                    client: null
+                }
+            });
+        }
 
         return Person.find({
             where: {

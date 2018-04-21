@@ -18,9 +18,7 @@ Clients.push({
     handler: async (request, h) => {
         const { id } = request.params;
 
-        return Client.findOneById(id, {
-            relations: ['staff']
-        });
+        return Client.findOneById(id);
     }
 });
 

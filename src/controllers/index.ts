@@ -6,6 +6,9 @@ import { People } from "./People";
 import { ClientJobs } from "./ClientJobs";
 import { ClientDevices } from "./ClientDevices";
 import { JobRegistrations } from "./JobRegistration";
+import { JobDiagnoses } from "./JobDiagnoses";
+import { JobOrders } from "./JobOrders";
+import { JobCompletions } from "./JobCompletions";
 
 export const Controllers = [
     ...List,
@@ -13,6 +16,9 @@ export const Controllers = [
     ...ClientJobs,
     ...ClientDevices,
     ...JobRegistrations,
+    ...JobDiagnoses,
+    ...JobOrders,
+    ...JobCompletions,
     ...People,
     ...Users,
     ...Sessions
