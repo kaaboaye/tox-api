@@ -9,6 +9,7 @@ import { JobRegistrations } from "./JobRegistration";
 import { JobDiagnoses } from "./JobDiagnoses";
 import { JobOrders } from "./JobOrders";
 import { JobCompletions } from "./JobCompletions";
+import { JobClosures } from "./JobClosures";
 
 export const Controllers = [
     ...List,
@@ -19,6 +20,7 @@ export const Controllers = [
     ...JobDiagnoses,
     ...JobOrders,
     ...JobCompletions,
+    ...JobClosures,
     ...People,
     ...Users,
     ...Sessions

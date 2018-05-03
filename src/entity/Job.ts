@@ -8,6 +8,7 @@ import { IsEnum } from "class-validator";
 import { JobDiagnosis } from "./JobDiagnosis";
 import { JobOrder } from "./JobOrder";
 import { JobCompletion } from "./JobCompletion";
+import { JobClosure } from "./JobClosure";
 
 export enum JobRegistrationType {
     PostWarranty,
@@ -39,7 +40,8 @@ export const JobExtendedRelations = [
     'diagnosis.serviceman',
     'order',
     'completion',
-    'completion.serviceman'
+    'completion.serviceman',
+    'closure'
 ];
 
 @Entity()
@@ -86,6 +88,10 @@ export class Job extends BaseEntity {
     @OneToOne(type => JobCompletion)
     @JoinColumn()
     completion: JobCompletion;
+
+    @OneToOne(type => JobClosure)
+    @JoinColumn()
+    closure: JobClosure;
 
     @Column({
         type: 'timestamp',

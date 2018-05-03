@@ -7,6 +7,23 @@ export const Users: ServerRoute[] = [];
 const path = '/users';
 
 Users.push({
+    path,
+    method: 'get',
+    handler: async (request, h) => {
+        return await User.find({
+            select: [
+                'username',
+                'rank',
+                'identity'
+            ],
+            relations: [
+                'identity'
+            ]
+        });
+    }
+});
+
+Users.push({
     path: path + '/me',
     method: 'get',
     handler: async (request, h) => {
@@ -111,5 +128,50 @@ Users.push({
 
            throw e;
        }
+   }
+});
+
+interface PatchPasswordForm {
+    oldPasswd: string;
+    newPasswd: string;
+    repeatPasswd: string;
+}
+Users.push({
+   path: path + '/password',
+   method: 'patch',
+   handler: async (request, h) => {
+        try {
+            const { oldPasswd, newPasswd, repeatPasswd } = request.payload as PatchPasswordForm;
+            const { user } = request.auth.credentials as Session;
+
+            if (!await user.CheckPassword(oldPasswd)) {
+                throw new Error('BadPasswd');
+            }
+
+            if (newPasswd !== repeatPasswd) {
+                throw new Error('PasswdsNotEqual');
+            }
+
+            await user.SetPassword(newPasswd);
+
+            return { changed: true };
+
+        } catch (e) {
+            const handle: string[] = [
+                'BadPasswd',
+                'PasswdsNotEqual'
+            ];
+
+            if (handle.includes(e.message)) {
+                return {
+                    error: {
+                        message: e.message
+                    }
+                };
+            }
+
+            throw e;
+        }
+
    }
 });

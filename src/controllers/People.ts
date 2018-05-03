@@ -50,13 +50,17 @@ People.push({
     path,
     method: 'patch',
     handler: async (request, h) => {
-        const recived: Person = request.payload as Person;
+        const received: Person = request.payload as Person;
 
-        const person = await Person.findOneById(recived.id);
-        person.firstName = recived.firstName;
-        person.lastName = recived.lastName;
-        person.email = recived.email;
-        person.phoneNumber = recived.phoneNumber;
+        const person = await Person.findOneById(received.id);
+        person.firstName = received.firstName;
+        person.lastName = received.lastName;
+        person.email = received.email;
+        person.phoneNumber = received.phoneNumber;
+
+        if (received.client) {
+            person.client = received.client;
+        }
 
         await person.save();
 

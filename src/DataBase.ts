@@ -18,7 +18,7 @@ export interface IdOnly {
 
 export const ConnectionConfig: ConnectionOptions = {
     type: "postgres",
-    host: "localhost",
+    host: process.env.DB_HOST || "localhost",
     username: "postgres",
     password: "mysecretpassword",
     database: "postgres",
