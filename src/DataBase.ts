@@ -16,13 +16,20 @@ export interface IdOnly {
     id: number;
 }
 
+let port: number;
+if (process.env.DB_PORT) {
+    port = parseInt(process.env.DB_PORT, 10);
+} else {
+    port = 32001;
+}
+
 export const ConnectionConfig: ConnectionOptions = {
     type: "postgres",
     host: process.env.DB_HOST || "localhost",
     username: "postgres",
     password: "mysecretpassword",
     database: "postgres",
-    port: 32001,
+    port,
     synchronize: true,
     logging: true,
     entities: [

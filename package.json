@@ -10,7 +10,7 @@
    "dependencies": {
       "@types/bcrypt": "^1.0.0",
       "@types/hapi": "^17.0.7",
-      "bcrypt": "^1.0.3",
+      "bcrypt": "^2.0.1",
       "class-validator": "^0.8.1",
       "hapi": "^17.2.3",
       "hapi-auth-bearer-token": "^6.0.1",

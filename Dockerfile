@@ -3,9 +3,8 @@ FROM node:latest
   COPY . /app
   WORKDIR /app
   RUN echo "" \
-    && apt-get update \
-    && apt-get install build-essential \
-    && npm install typescript -g \
+    && rm -rf node_modules/ \
+    && npm i npm typescript -g \
     && npm i
   RUN npm run build
 
