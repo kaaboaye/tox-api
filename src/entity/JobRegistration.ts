@@ -16,6 +16,7 @@ export class JobRegistration extends BaseEntity {
 
     // Linked list
     @OneToOne(type => JobRegistration)
+    @JoinColumn()
     prev: JobRegistration;
 
     @Column({

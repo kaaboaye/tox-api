@@ -38,6 +38,47 @@ Users.push({
     }
 });
 
+class UserChangePassword {
+    user: User;
+    oldPassword: string;
+    newPassword: string;
+    repeatPassword: string;
+}
+Users.push({
+    path: path + '/change-password',
+    method: 'post',
+    handler: async (request, h) => {
+        try {
+
+            const received = request.payload as UserChangePassword;
+
+            const user = await User.findOneById(received.user.id);
+            if (!user) {
+                throw new Error('NoSuchUser');
+            }
+
+            if (!user.CheckPassword(received.oldPassword)) {
+
+            }
+
+        } catch (e) {
+            const handle: string[] = [
+                'NoSuchUserOrBadPassword'
+            ];
+
+            if (handle.includes(e.message)) {
+                return {
+                    error: {
+                        message: e.message
+                    }
+                };
+            }
+
+            throw e;
+        }
+    }
+});
+
 Users.push({
     path,
     method: 'post',

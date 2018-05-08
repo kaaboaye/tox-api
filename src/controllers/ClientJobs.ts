@@ -2,7 +2,6 @@ import { ServerRoute } from "hapi";
 import { path as ClientsPath } from './Clients';
 import { Job, JobExtendedRelations, JobState } from "../entity/Job";
 import { Client } from "../entity/Client";
-import { Device } from "../entity/Device";
 import { Session } from "../entity/Session";
 import { User } from "../entity/User";
 
@@ -50,7 +49,10 @@ ClientJobs.push({
         const jobId: number = parseInt(request.params.jobId, 10);
 
         return Job.findOneById(jobId, {
-           relations: JobExtendedRelations
+           relations: [
+               ...JobExtendedRelations,
+               'registration.prev'
+           ]
         });
     }
 });
