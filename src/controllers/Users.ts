@@ -2,6 +2,7 @@ import { ServerRoute, Util } from "hapi";
 import { Person } from "../entity/Person";
 import { User } from "../entity/User";
 import { Session } from "../entity/Session";
+import { getConnection } from "typeorm";
 
 export const Users: ServerRoute[] = [];
 const path = '/users';
@@ -52,18 +53,35 @@ Users.push({
 
             const received = request.payload as UserChangePassword;
 
-            const user = await User.findOneById(received.user.id);
+            const user = await User.findOneById(received.user.id, {
+                relations: [
+                    'identity'
+                ]
+            });
+
             if (!user) {
                 throw new Error('NoSuchUser');
             }
 
-            if (!user.CheckPassword(received.oldPassword)) {
-
+            if (!await user.CheckPassword(received.oldPassword)) {
+                throw new Error('BadPassword');
             }
+
+            if (received.newPassword !== received.repeatPassword) {
+                throw new Error('PasswordsNotEqual');
+            }
+
+            await user.UpdatePassword(received.newPassword);
+
+            user.password = undefined; // don't return hash
+
+            return user;
 
         } catch (e) {
             const handle: string[] = [
-                'NoSuchUserOrBadPassword'
+                'NoSuchUser',
+                'BadPassword',
+                'PasswordsNotEqual'
             ];
 
             if (handle.includes(e.message)) {

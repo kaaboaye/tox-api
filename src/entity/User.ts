@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne, getConnection } from "typeorm";
 import 'reflect-metadata';
 import { IsAlphanumeric, IsEnum, Length } from "class-validator";
 import { Person } from "./Person";
@@ -45,7 +45,24 @@ export class User extends BaseEntity {
     // Methods
 
     async SetPassword(pass: string): Promise<void> {
-        this.password = await hash(pass, Config.SaltRounds);
+        this.password = await User.CalcHash(pass);
+    }
+
+    async UpdatePassword(pass: string): Promise<void> {
+        await getConnection()
+            .createQueryBuilder()
+            .update(User)
+            .set({
+                password: await User.CalcHash(pass)
+            })
+            .where({
+                id: this.id
+            })
+            .execute();
+    }
+
+    static async CalcHash(pass: string): Promise<string> {
+        return await hash(pass, Config.SaltRounds);
     }
 
     async CheckPassword(pass: string): Promise<boolean> {
