@@ -13,6 +13,7 @@ Users.push({
     handler: async (request, h) => {
         return await User.find({
             select: [
+                'id',
                 'username',
                 'rank',
                 'identity'
@@ -25,17 +26,55 @@ Users.push({
 });
 
 Users.push({
-    path: path + '/me',
+    path: path + '/{userId}',
     method: 'get',
     handler: async (request, h) => {
-        const { user } = request.auth.credentials as Session;
+        const { userId } = request.params;
 
-        const u = await User.findOneById(user.id, {
+        const u = await User.findOneById(userId, {
             relations: ['identity']
         });
+        if (!u) {
+            throw new Error('NoSuchUser');
+        }
 
         u.password = undefined;
         return u;
+    }
+});
+
+Users.push({
+    path: path + '/me',
+    method: 'get',
+    handler: async (request, h) => {
+        try {
+
+            const { user } = request.auth.credentials as Session;
+
+            const u = await User.findOneById(user.id, {
+                relations: ['identity']
+            });
+
+            u.password = undefined;
+            return u;
+
+        } catch (e) {
+            const handle: string[] = [
+                'NoSuchUser',
+                'BadPassword',
+                'PasswordsNotEqual'
+            ];
+
+            if (handle.includes(e.message)) {
+                return {
+                    error: {
+                        message: e.message
+                    }
+                };
+            }
+
+            throw e;
+        }
     }
 });
 
