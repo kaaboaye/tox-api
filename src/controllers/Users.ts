@@ -1,8 +1,8 @@
 import { ServerRoute, Util } from "hapi";
 import { Person } from "../entity/Person";
-import { User } from "../entity/User";
+import { User, UserRank } from "../entity/User";
 import { Session } from "../entity/Session";
-import { getConnection } from "typeorm";
+import { Group } from "../RankGroups";
 
 export const Users: ServerRoute[] = [];
 const path = '/users';
@@ -89,7 +89,7 @@ Users.push({
     method: 'post',
     handler: async (request, h) => {
         try {
-
+            const adm = (request.auth.credentials as Session).user;
             const received = request.payload as UserChangePassword;
 
             const user = await User.findOneById(received.user.id, {
@@ -102,7 +102,7 @@ Users.push({
                 throw new Error('NoSuchUser');
             }
 
-            if (!await user.CheckPassword(received.oldPassword)) {
+            if (!Group.ChangeUser.includes(adm.rank) && !await user.CheckPassword(received.oldPassword)) {
                 throw new Error('BadPassword');
             }
 
@@ -139,36 +139,34 @@ Users.push({
 Users.push({
     path,
     method: 'post',
-    options: {
-        auth: false
-    },
     handler: async (request, h) => {
         try {
-            const { identityId, firstName, lastName, email, phoneNumber, username, password, rank } = request.payload as any;
-
-            let identity: Person;
-
-            // Get identity
-            if (identityId) {
-                identity = await Person.findOneById(identityId);
-            } else {
-                identity = new Person();
-                identity.firstName = firstName;
-                identity.lastName = lastName;
-                identity.email = email;
-                identity.phoneNumber = phoneNumber;
-                await identity.save();
+            console.log(request.auth);
+            const { user } = request.auth.credentials as Session;
+            if (!Group.CreateUser.includes(user.rank)) {
+                throw new Error('CannotCreateUser');
             }
 
-            // Create User
-            const user = new User();
-            user.username = username;
-            user.identity = identity;
-            user.rank = rank;
-            await user.SetPassword(password);
-            await user.save();
+            const received = request.payload as User;
+            console.log(request.payload);
 
-            return user;
+            const u = new User();
+            u.rank = received.rank;
+            u.username = received.username;
+            await u.SetPassword(received.password);
+
+            u.identity = new Person();
+            u.identity.firstName = received.identity.firstName;
+            u.identity.lastName = received.identity.lastName;
+            u.identity.email = received.identity.email;
+            u.identity.phoneNumber = received.identity.phoneNumber;
+
+            await u.identity.save();
+            await u.save();
+            u.password = undefined;
+
+            return u;
+
         } catch (e) {
             throw e;
         }
@@ -226,50 +224,5 @@ Users.push({
 
            throw e;
        }
-   }
-});
-
-interface PatchPasswordForm {
-    oldPasswd: string;
-    newPasswd: string;
-    repeatPasswd: string;
-}
-Users.push({
-   path: path + '/password',
-   method: 'patch',
-   handler: async (request, h) => {
-        try {
-            const { oldPasswd, newPasswd, repeatPasswd } = request.payload as PatchPasswordForm;
-            const { user } = request.auth.credentials as Session;
-
-            if (!await user.CheckPassword(oldPasswd)) {
-                throw new Error('BadPasswd');
-            }
-
-            if (newPasswd !== repeatPasswd) {
-                throw new Error('PasswdsNotEqual');
-            }
-
-            await user.SetPassword(newPasswd);
-
-            return { changed: true };
-
-        } catch (e) {
-            const handle: string[] = [
-                'BadPasswd',
-                'PasswdsNotEqual'
-            ];
-
-            if (handle.includes(e.message)) {
-                return {
-                    error: {
-                        message: e.message
-                    }
-                };
-            }
-
-            throw e;
-        }
-
    }
 });
