@@ -24,10 +24,15 @@ JobRegistrations.push({
             registration.placeOfRealisation = received.registration.placeOfRealisation;
             registration.description = received.registration.description;
 
+            if (!job.registration) {
+                job.state = JobState.Registered;
+            } else {
+                registration.prev = job.registration;
+            }
+
             await registration.save();
 
             job.registration = registration;
-            job.state = JobState.Registered;
 
             await job.save();
 
@@ -43,6 +48,33 @@ JobRegistrations.push({
                     .code(404);
             }
 
+            throw err;
+        }
+    }
+});
+
+JobRegistrations.push({
+    path: path + '/{registrationId}/prev',
+    method: 'get',
+    handler: async (request, h) => {
+        try {
+            const jr = await JobRegistration.findOneById(request.params.registrationId, {
+                relations: [
+                    'prev'
+                ]
+            });
+
+            if (!jr) {
+                throw new Error('NoSuchJobRegistration');
+            }
+
+            if (!jr.prev) {
+                jr.prev = new JobRegistration();
+            }
+
+            return jr.prev;
+
+        } catch (err) {
             throw err;
         }
     }
