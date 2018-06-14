@@ -24,12 +24,21 @@ JobOrders.push({
             order.numberSAP = received.order.numberSAP;
             order.purchaseOrder = received.order.purchaseOrder;
 
+            if (!job.order) {
+                job.state = JobState.Ordered;
+            } else {
+                order.prev = job.order;
+            }
+
             await order.save();
 
             job.order = order;
-            job.state = JobState.Ordered;
 
             await job.save();
+
+            if (job.order.prev) {
+                job.order.prevId = job.order.id;
+            }
 
             return job;
 
@@ -45,5 +54,27 @@ JobOrders.push({
 
             throw err;
         }
+    }
+});
+
+JobOrders.push({
+    method: 'get',
+    path: path + '/{orderId}/prev',
+    handler: async (request, h) => {
+        const jo = await JobOrder.findOneById(request.params.orderId, {
+            relations: [
+                'prev'
+            ]
+        });
+
+        if (!jo) {
+            throw new Error('NoSuchJobOrder');
+        }
+
+        if (!jo.prev) {
+            return {};
+        }
+
+        return jo.prev;
     }
 });

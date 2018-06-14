@@ -50,8 +50,7 @@ ClientJobs.push({
 
         return Job.findOneById(jobId, {
            relations: [
-               ...JobExtendedRelations,
-               'registration.prev'
+               ...JobExtendedRelations
            ]
         });
     }

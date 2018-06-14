@@ -24,12 +24,21 @@ JobClosures.push({
             closure.dateOfDispatch = received.closure.dateOfDispatch;
             closure.dateOfClosure = new Date();
 
+            if (!job.closure) {
+                job.state = JobState.Closed;
+            } else {
+                closure.prev = job.closure;
+            }
+
             await closure.save();
 
             job.closure = closure;
-            job.state = JobState.Closed;
 
             await job.save();
+
+            if (job.closure.prev) {
+                job.closure.prevId = job.closure.prev.id;
+            }
 
             return job;
 
@@ -46,5 +55,27 @@ JobClosures.push({
             throw err;
 
         }
+    }
+});
+
+JobClosures.push({
+    method: 'get',
+    path: path + '/{closureId}/prev',
+    handler: async (request, h) => {
+        const jc = await JobClosure.findOneById(request.params.closureId, {
+            relations: [
+                'prev'
+            ]
+        });
+
+        if (!jc) {
+            throw new Error('NoSuchJobClosure');
+        }
+
+        if (!jc.prev) {
+            return {};
+        }
+
+        return jc.prev;
     }
 });

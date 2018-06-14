@@ -1,6 +1,6 @@
-import { ServerRoute, Util } from "hapi";
+import { ServerRoute } from "hapi";
 import { Person } from "../entity/Person";
-import { User, UserRank } from "../entity/User";
+import { User } from "../entity/User";
 import { Session } from "../entity/Session";
 import { Group } from "../RankGroups";
 

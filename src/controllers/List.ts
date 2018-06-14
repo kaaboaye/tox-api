@@ -1,6 +1,5 @@
 import { ServerRoute } from "hapi";
 import { TestList } from "../entity/TestList";
-import { concat } from "joi";
 
 export const List: ServerRoute[] = [];
 const path = '/list';

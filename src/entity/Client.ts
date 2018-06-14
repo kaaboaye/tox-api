@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
-import { IsAlpha, Length } from "class-validator";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
+import { IsAlpha } from "class-validator";
 import { Person } from "./Person";
 import { Device } from "./Device";
 

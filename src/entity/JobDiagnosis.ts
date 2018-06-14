@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToOne } from "typeorm";
 import 'reflect-metadata';
 import { IsEnum } from "class-validator";
 import { Person } from "./Person";
@@ -10,8 +10,15 @@ export class JobDiagnosis extends BaseEntity {
     id: number;
 
     @OneToOne(type => JobDiagnosis)
-    @JoinColumn()
+    @JoinColumn({
+        name: 'prevId'
+    })
     prev: JobDiagnosis;
+
+    @Column({
+        nullable: true
+    })
+    prevId: number;
 
     @Column({
         type: 'timestamp',

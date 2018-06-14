@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, OneToOne } from "typeorm";
 
 export interface EventClosureUpdate {
     dateOfDispatch?: Date;
@@ -13,8 +13,15 @@ export class JobClosure extends BaseEntity {
     id: number;
 
     @OneToOne(type => JobClosure)
-    @JoinColumn()
+    @JoinColumn({
+        name: 'prevId'
+    })
     prev: JobClosure;
+
+    @Column({
+        nullable: true
+    })
+    prevId: number;
 
     @Column({
         type: 'timestamp',

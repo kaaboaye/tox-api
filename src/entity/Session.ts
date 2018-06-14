@@ -1,7 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne } from "typeorm";
 import 'reflect-metadata';
-import { IsAlphanumeric, Length } from "class-validator";
-import { Person } from "./Person";
 import { User } from "./User";
 import { randomBytes } from "crypto";
 

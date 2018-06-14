@@ -16,11 +16,11 @@ export async function Init() {
 
     // Events
     server.events.on('route', (route) => {
-        console.log(`New route added: ${(route.method as string).toUpperCase()} ${route.path}`)
+        console.log(`New route added: ${(route.method as string).toUpperCase()} ${route.path}`);
     });
 
-    server.events.on('response', (r) =>{
-        console.log(`${r.method.toUpperCase()} ${r.url.path} -> ${(r.response as any).statusCode}`)
+    server.events.on('response', (r) => {
+        console.log(`${r.method.toUpperCase()} ${r.url.path} -> ${(r.response as any).statusCode}`);
     });
 
     // Set route prefix for example '/api'
@@ -28,7 +28,7 @@ export async function Init() {
         server.realm.modifiers.route.prefix = Config.RoutePrefix;
     }
 
-    await server.register(require('hapi-auth-bearer-token/lib'));
+    server.register(require('hapi-auth-bearer-token/lib'));
     await server.auth.strategy('simple', 'bearer-access-token', {
         validate: async (request, token: string, h) => {
 

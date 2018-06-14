@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, OneToOne } from "typeorm";
 import 'reflect-metadata';
 import { IsEnum } from "class-validator";
 import { JobRegistrationType } from "./Job";
@@ -16,8 +16,15 @@ export class JobRegistration extends BaseEntity {
 
     // Linked list
     @OneToOne(type => JobRegistration)
-    @JoinColumn()
+    @JoinColumn({
+        name: 'prevId'
+    })
     prev: JobRegistration;
+
+    @Column({
+        nullable: true
+    })
+    prevId: number;
 
     @Column({
         type: 'timestamp',

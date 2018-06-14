@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, OneToOne } from "typeorm";
 
 @Entity()
 export class JobOrder extends BaseEntity {
@@ -7,8 +7,15 @@ export class JobOrder extends BaseEntity {
     id: number;
 
     @OneToOne(type => JobOrder)
-    @JoinColumn()
+    @JoinColumn({
+        name: 'prevId'
+    })
     prev: JobOrder;
+
+    @Column({
+        nullable: true
+    })
+    prevId: number;
 
     @Column({
         type: 'timestamp',

@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne } from "typeorm";
 import 'reflect-metadata';
-import { IsAlpha, IsEmail, IsEnum, IsMobilePhone, Length } from "class-validator";
+import { IsAlpha, IsEmail, IsMobilePhone, Length } from "class-validator";
 import { Client } from "./Client";
 
 @Entity()

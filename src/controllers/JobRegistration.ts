@@ -36,6 +36,10 @@ JobRegistrations.push({
 
             await job.save();
 
+            if (job.registration.prev) {
+                job.registration.prevId = job.registration.prev.id;
+            }
+
             return job;
 
         } catch (err) {
@@ -69,7 +73,7 @@ JobRegistrations.push({
             }
 
             if (!jr.prev) {
-                jr.prev = new JobRegistration();
+                return {};
             }
 
             return jr.prev;

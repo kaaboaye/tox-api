@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, OneToOne, getConnection } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, JoinColumn, OneToMany, OneToOne, getConnection } from "typeorm";
 import 'reflect-metadata';
 import { IsAlphanumeric, IsEnum, Length } from "class-validator";
 import { Person } from "./Person";
